@@ -1,29 +1,24 @@
 <?php
 	include("session.php");
-	include("sidepan.html");
-	$error = "";
-	$error1 = ""; 
-	if($_SERVER["REQUEST_METHOD"] == "POST"){
-		$user = $_SESSION['user'];
-		$pass = $_POST['cpass'];
-		$npass = $_POST['npass'];
-		$rpass = $_POST['rpass'];
-		$sql = "SELECT * FROM users WHERE userid='$user' AND password = '$pass'";
-		$result = mysql_query($sql);
-		$count = mysql_num_rows ($result);
-		if($count == 1){
-			if($npass == $rpass){
-				$sql = "UPDATE users SET password='$npass' WHERE userid='$user'";
-				$result = mysql_query($sql) or die(mysql_error());
-				$error1 = "Passwords Succesfully updated";
-			}
-			else{
-				$error = "Passwords not matched";
-			}
-		}
-		else {
-			$error = "Invalid Current Password";
-		}		
+	include("sidepan.html");	 
+	if($_SERVER['REQUEST_METHOD'] == "POST") {
+		$empid = $_POST['empid'];
+		$fname = $_POST['fname'];
+		$lname = $_POST['lname'];
+		$sname = $_POST['sname'];
+		$gender = $_POST['gender'];
+		$dob = $_POST['dob'];
+		$maritalstatus = $_POST['maritalstatus'];
+		$add1 = $_POST['add1'];
+		$add2 = $_POST['add2'];
+		$city = $_POST['city'];
+		$district = $_POST['district'];
+		$cell = $_POST['cell'];
+		$sql = "INSERT INTO `emprofile` (`ID`, `EmpID`, `Fname`, `Lname`, `Sname`, `Gender`, `DOB`, `MaritalStatus`, `Add1`, `Add2`, `City`, `District`, `Cell`, `rem`, `Status`) VALUES (NULL, '$empid', '$fname', '$lname', '$sname', '$gender', '$dob', '$maritalstatus', '$add1', '$add2', '$city', '$district', '$cell', '', '1')";
+		$result = mysql_query($sql) or die(mysql_error());		
+	}
+	else {
+		header("location:admin.php");	
 	}	
 ?>
 <!DOCTYPE HTML>
@@ -110,56 +105,82 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!--notification menu end -->
 			</div>
 	<div class="panel-body panel-body-inputin">
-		<h3 class="blank1">Change Password</h3>
-		<form role="form" class="form-horizontal" method="post">
+		<h3 class="blank1">Employee Registered Succesfully </h3> 
+		<div class="row">
 			<div class="form-group">
-				<label class="col-md-2 control-label">Current Password</label>
-				<div class="col-md-8">
-					<div class="input-group in-grp1">							
-						<span class="input-group-addon">
-							<i class="fa fa-key"></i>
-						</span>
-						<input type="password" class="form-control1" name="cpass" placeholder="Current Password" required>
-					</div>
+				<label class="col-md-1">Employee ID</label>
+				<div class="col-md-2">					
+						<?php echo $empid; ?>					
 				</div>
-				<div class="clearfix"> </div>
+				<label class="col-md-1">First Name</label>
+				<div class="col-md-2">					
+						<?php echo $fname; ?>					
+				</div>
+				<label class="col-md-1">Last Name</label>
+				<div class="col-md-2">					
+						<?php echo $lname; ?>							
+				</div>
+				<label class="col-md-1">Surname</label>
+				<div class="col-md-2">					
+						<?php echo $sname; ?>					
+				</div>				
 			</div>
+		</div>
+		<div class = "row">
 			<div class="form-group">
-				<label class="col-md-2 control-label">New Password</label>
-				<div class="col-md-8">
-					<div class="input-group in-grp1">
-						<span class="input-group-addon">
-							<i class="fa fa-key"></i>
-						</span>
-						<input type="password" class="form-control1" name="npass" placeholder="New Password" required>
-					</div>
+				<label class="col-md-1">Gender</label>
+				<div class="col-md-2">					
+						<?php echo $gender; ?>	
 				</div>
-				<div class="clearfix"> </div>
+				<label class="col-md-1">Date of Birth</label>
+				<div class="col-md-2">					
+						<?php echo $dob; ?>					
+				</div>
+				<label class="col-md-1">Marital Status</label>
+				<div class="col-md-2">					
+						<?php echo $maritalstatus; ?>	
+				</div>
+				<label class="col-md-1">Address 1</label>
+				<div class="col-md-2">					
+						<?php echo $add1; ?>					
+				</div>				
 			</div>
+		</div>
+		<div class = "row">	
 			<div class="form-group">
-				<label class="col-md-2 control-label">Repeate Password</label>
-				<div class="col-md-8">
-					<div class="input-group in-grp1">
-						<span class="input-group-addon">
-							<i class="fa fa-key"></i>
-						</span>
-						<input type="password" class="form-control1" name="rpass" placeholder="Repeate Password" required>
-					</div>
+				<label class="col-md-1">Address 2</label>
+				<div class="col-md-2">					
+						<?php echo $add2; ?>
 				</div>
-				<div class="clearfix"> </div>
+				<label class="col-md-1">City</label>
+				<div class="col-md-2">					
+						<?php echo $city; ?>	
+				</div>
+				<label class="col-md-1">District</label>
+				<div class="col-md-2">					
+						<?php echo $district; ?>	
+				</div>
+				<label class="col-md-1">Mobile Number</label>
+				<div class="col-md-2">					
+						<?php echo $cell; ?>	
+				</div>				
 			</div>
+		</div>
+		<div class = "row">
 			<div class="form-group">
-				<label class="col-md-2 control-label"></label>
-				<div class="col-md-8">
-					<div class="input-group in-grp1">						
-						<button type="submit" class="btn-success">Submit</button>
-						<label style = "color:red"><?php echo $error;  ?></label>
-						<label style = "color:green"><?php echo $error1;  ?></label>
-					</div>					
+				<label class="col-md-1 control-label"></label>
+				<div class="col-md-7">					
+						<label style="color:green"> Employee Register Succesfully, Add Designation and Working Place of the Employee</label>					
+						<form method="POST" action = "addemp.php">
+							<input type="hidden" value = "<?php echo $empid; ?>" name = "empid">							
+							<input type="hidden" value = "<?php echo $fname; ?>" name = "fname">							
+							<input type="hidden" value = "<?php echo $lname; ?>" name = "lname">							
+							<input type="hidden" value = "<?php echo $sname; ?>" name = "sname">							
+							<button type="submit" class="btn-success">Click here</button>
+						</form>
 				</div>
-				<div class="clearfix"> </div>
-			</div>						
-		</form>
+			</div>
+		</div>	
 	</div>
 			
 		</div>	

@@ -1,30 +1,6 @@
 <?php
 	include("session.php");
-	include("sidepan.html");
-	$error = "";
-	$error1 = ""; 
-	if($_SERVER["REQUEST_METHOD"] == "POST"){
-		$user = $_SESSION['user'];
-		$pass = $_POST['cpass'];
-		$npass = $_POST['npass'];
-		$rpass = $_POST['rpass'];
-		$sql = "SELECT * FROM users WHERE userid='$user' AND password = '$pass'";
-		$result = mysql_query($sql);
-		$count = mysql_num_rows ($result);
-		if($count == 1){
-			if($npass == $rpass){
-				$sql = "UPDATE users SET password='$npass' WHERE userid='$user'";
-				$result = mysql_query($sql) or die(mysql_error());
-				$error1 = "Passwords Succesfully updated";
-			}
-			else{
-				$error = "Passwords not matched";
-			}
-		}
-		else {
-			$error = "Invalid Current Password";
-		}		
-	}	
+	include("sidepan.html");	
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -61,6 +37,27 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  <!-- Meters graphs -->
 <script src="js/jquery-1.10.2.min.js"></script>
 <!-- Placed js at the end of the document so the pages load faster -->
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#empid").onkeyup(function(){
+			var empid = $("#empid").val();
+			
+			jQuery.ajax({
+				type:"POST",
+				url:"usercheck.php",
+				data:"empid =" + empid;
+					success:function(data){
+						if(data==0){
+							
+						}
+						else {
+							$("#message").html("<span style=font-size:13px; color: red'> Username already taken</span>");
+						}
+					}
+			});
+		});
+	});
+</script>
 
 </head> 
    
@@ -110,51 +107,76 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!--notification menu end -->
 			</div>
 	<div class="panel-body panel-body-inputin">
-		<h3 class="blank1">Change Password</h3>
-		<form role="form" class="form-horizontal" method="post">
+		<h3 class="blank1">Register Employee Profile</h3>
+		<form role="form" class="form-horizontal" action="regsuc.php" method="post">			
 			<div class="form-group">
-				<label class="col-md-2 control-label">Current Password</label>
-				<div class="col-md-8">
-					<div class="input-group in-grp1">							
-						<span class="input-group-addon">
-							<i class="fa fa-key"></i>
-						</span>
-						<input type="password" class="form-control1" name="cpass" placeholder="Current Password" required>
-					</div>
+				<label class="col-md-1">Employee ID</label>
+				<div class="col-md-2">					
+						<input type="text" class="form-control1" id ="empid" name="empid" placeholder="Employee ID" required>					
 				</div>
-				<div class="clearfix"> </div>
+				<label class="col-md-1">First Name</label>
+				<div class="col-md-2">					
+						<input type="text" class="form-control1" name="fname" placeholder="First Name" required>					
+				</div>
+				<label class="col-md-1">Last Name</label>
+				<div class="col-md-2">					
+						<input type="text" class="form-control1" name="lname" placeholder="Last Name" required>					
+				</div>
+				<label class="col-md-1">Surname</label>
+				<div class="col-md-2">					
+						<input type="text" class="form-control1" name="sname" placeholder="Surname" required>					
+				</div>				
 			</div>
 			<div class="form-group">
-				<label class="col-md-2 control-label">New Password</label>
-				<div class="col-md-8">
-					<div class="input-group in-grp1">
-						<span class="input-group-addon">
-							<i class="fa fa-key"></i>
-						</span>
-						<input type="password" class="form-control1" name="npass" placeholder="New Password" required>
-					</div>
+				<label class="col-md-1">Gender</label>
+				<div class="col-md-2">					
+						<select class="form-control1" name="gender">					
+							<option>Male</option>
+							<option>Female</option>							
+						</select>	
 				</div>
-				<div class="clearfix"> </div>
-			</div>
+				<label class="col-md-1">Date of Birth</label>
+				<div class="col-md-2">					
+						<input type="date" class="form-control1" name="dob" placeholder="DD / MM / YYYY" required>					
+				</div>
+				<label class="col-md-1">Marital Status</label>
+				<div class="col-md-2">					
+						<select class="form-control1" name="maritalstatus">					
+							<option>Married</option>
+							<option>Unmarried</option>							
+						</select>	
+				</div>
+				<label class="col-md-1">Address 1</label>
+				<div class="col-md-2">					
+						<input type="text" class="form-control1" name="add1" placeholder="Address 1" required>					
+				</div>				
+			</div>						
 			<div class="form-group">
-				<label class="col-md-2 control-label">Repeate Password</label>
-				<div class="col-md-8">
-					<div class="input-group in-grp1">
-						<span class="input-group-addon">
-							<i class="fa fa-key"></i>
-						</span>
-						<input type="password" class="form-control1" name="rpass" placeholder="Repeate Password" required>
-					</div>
+				<label class="col-md-1">Address 2</label>
+				<div class="col-md-2">					
+						<input type="text" class="form-control1" name="add2" placeholder="Address 2" required>					
 				</div>
-				<div class="clearfix"> </div>
-			</div>
+				<label class="col-md-1">City</label>
+				<div class="col-md-2">					
+						<input type="text" class="form-control1" name="city" placeholder="City" required>					
+				</div>
+				<label class="col-md-1">District</label>
+				<div class="col-md-2">					
+						<input type="text" class="form-control1" name="district" placeholder="District" required>					
+				</div>
+				<label class="col-md-1">Mobile Number</label>
+				<div class="col-md-2">					
+						<input type="text" class="form-control1" name="cell" placeholder="Mobile Number" required>					
+				</div>				
+			</div>		
+						
+			
+			
 			<div class="form-group">
 				<label class="col-md-2 control-label"></label>
 				<div class="col-md-8">
 					<div class="input-group in-grp1">						
-						<button type="submit" class="btn-success">Submit</button>
-						<label style = "color:red"><?php echo $error;  ?></label>
-						<label style = "color:green"><?php echo $error1;  ?></label>
+						<button type="submit" class="btn-success">Submit</button>						
 					</div>					
 				</div>
 				<div class="clearfix"> </div>
