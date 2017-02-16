@@ -9,9 +9,7 @@
 	}
 	else {
 		header("location:admin.php");
-	}
-	$sql = mysql_query("SELECT * FROM emprofile WHERE EmpID= '$empid'");
-	$row = mysql_fetch_assoc($sql);
+	}	
 	$sql1 = mysql_query("SELECT * FROM designations") or die(mysql_error());
 	$sql2 = mysql_query("SELECT * FROM subdivision") or die(mysql_error());
 ?>
@@ -104,7 +102,13 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<label class="col-md-1">Employee ID</label>
 						<div class="col-md-2"><?php echo $empid; ?> </div>
 						<label class="col-md-1">Employee Name</label>
-						<div class="col-md-2"><?php echo $fname." ".$lname." ".$sname; ?> </div>
+						<div class="col-md-2"><?php echo $fname." ".$lname." ".$sname; ?> 
+							<input type = "hidden" value = "<?php echo $empid; ?>" name ="empid">
+							<input type = "hidden" value = "<?php echo $fname; ?>" name ="fname">
+							<input type = "hidden" value = "<?php echo $lname; ?>" name ="lname">
+							<input type = "hidden" value = "<?php echo $sname; ?>" name ="sname">
+						</div>
+						
 						<label class="col-md-1">Designation</label>
 						<div class="col-md-2">
 							<select name="DegID" class="form-control1">								
@@ -115,7 +119,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						</div>
 						<label class="col-md-1">Sub Division</label>
 						<div class="col-md-2">
-							<select name="SubDiv" class="form-control1">								
+							<select name="SubDivID" class="form-control1">								
 								<?php while ($row2 = mysql_fetch_assoc($sql2)) 
 									echo "<option value ='".$row2['ID']."'>".$row2["SubDiv"]."</option>";								
 								 ?>

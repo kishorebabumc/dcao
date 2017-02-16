@@ -6,11 +6,19 @@
 		$fname = $_POST['fname'];
 		$lname = $_POST['lname'];
 		$sname = $_POST['sname'];
-	}
+		$subdivid = $_POST['SubDivID'];
+		$degid = $_POST['DegID'];
+		$doj = $_POST['doj'];		
+		$sql = mysql_query("INSERT INTO `empmonitoring` (`ID`, `EmpID`, `SubDivID`, `DegID`, `DOJ`, `DOL`, `Rem`, `Status`) VALUES (NULL, '$empid', '$subdivid', '$degid', '$doj', '', 'Joined', '1')");	
+		$sql1 = mysql_query("SELECT * FROM designations WHERE ID = '$degid' ");
+		$row1 = mysql_fetch_assoc($sql1);
+		$sql2 = mysql_query("SELECT * FROM subdivision WHERE ID = '$subdivid' ");		
+		$row2 = mysql_fetch_assoc($sql2);
+		$sql3 = mysql_query("INSERT INTO `users` (`id`, `userid`, `password`, `role`,`status`) VALUES (NULL, '$empid', '123456','2','1')");
+		}
 	else {
 		header("location:admin.php");
-	}
-	
+	}	
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -95,47 +103,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!--notification menu end -->
 			</div>
 			<div class="panel-body panel-body-inputin">
-				<h3 class="blank1">Add Employee</h3>
-				<form role="form" class="form-horizontal" action="addsuc.php" method="post">			
-					<div class="form-group">
+				<h3 class="blank1" style="color:green">Employee Successfully Added</h3>	
+				<div class="row">		
+					<div class="form-group">	
 						<label class="col-md-1">Employee ID</label>
-						<div class="col-md-2"><?php echo $empid; ?> </div>
+						<div class="col-md-2"><?php echo $empid; ?> </div>						
 						<label class="col-md-1">Employee Name</label>
-						<div class="col-md-2"><?php echo $fname." ".$lname." ".$sname; ?> </div>
+						<div class="col-md-2"><?php echo $fname." ".$lname." ".$sname; ?> </div>						
 						<label class="col-md-1">Designation</label>
-						<div class="col-md-2">
-							<select name="DegID" class="form-control1">								
-								<?php while ($row1 = mysql_fetch_assoc($sql1)) 
-									echo "<option value ='".$row1['ID']."'>".$row1["Designation"]."</option>";								
-								 ?>
-							</select>	
-						</div>
+						<div class="col-md-2"><?php echo $row1['Designation']; ?> </div>
 						<label class="col-md-1">Sub Division</label>
-						<div class="col-md-2">
-							<select name="SubDiv" class="form-control1">								
-								<?php while ($row2 = mysql_fetch_assoc($sql2)) 
-									echo "<option value ='".$row2['ID']."'>".$row2["SubDiv"]."</option>";								
-								 ?>
-							</select>	
-						</div>						
-					</div>
+						<div class="col-md-2"><?php echo $row2['SubDiv']; ?> </div>						
+					</div>	
+				</div>
+				<div class="row">
 					<div class="form-group">
 						<label class="col-md-1">Date of Joining</label>
-						<div class = "col-md-2">
-							<input type ="date" name ="doj" required>
-						</div>
-					</div>	
-					
-					<div class="form-group">
-						<label class="col-md-2 control-label"></label>
-						<div class="col-md-8">
-							<div class="input-group in-grp1">						
-								<button type="submit" class="btn-success">Submit</button>						
-							</div>					
-						</div>
-						<div class="clearfix"> </div>
-					</div>						
-				</form>
+						<div class="col-md-2"><?php echo $doj; ?> </div>						
+						<div class="col-md-4"><button class ="btn btn-primary" onclick="window.location.href='/dcao/admin.php'"> Home </button> </div>
+					</div>
+				</div>	
 			</div>			
 		</div>
 		<!-- //header-ends -->

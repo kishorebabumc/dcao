@@ -9,10 +9,15 @@
 		$result = mysql_query($sql);
 		$count = mysql_num_rows($result);
 		
-		if($count == 1){
+		if($count == 1){			
 			$row = mysql_fetch_assoc($result);
-			$_SESSION['user']= $row['userid'];
-			header("location:admin.php");
+			if($row['role'] == 1){				
+				$_SESSION['user']= $row['userid'];
+				header("location:admin.php");
+			}
+			else {
+				header("location:auditors.php");
+			}
 		}
 		else {
 			$error = "Invalid Username and Password";

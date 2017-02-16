@@ -39,10 +39,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- Placed js at the end of the document so the pages load faster -->
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("#empid").onkeyup(function(){
-			var empid = $("#empid").val();
-			
-			jQuery.ajax({
+		$("#empid").keyup(function(){
+			var empid = $(this).value;
+			$.ajax({
 				type:"POST",
 				url:"usercheck.php",
 				data:"empid =" + empid;

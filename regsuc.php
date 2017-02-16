@@ -14,7 +14,7 @@
 		$city = $_POST['city'];
 		$district = $_POST['district'];
 		$cell = $_POST['cell'];
-		$sql = "INSERT INTO `emprofile` (`ID`, `EmpID`, `Fname`, `Lname`, `Sname`, `Gender`, `DOB`, `MaritalStatus`, `Add1`, `Add2`, `City`, `District`, `Cell`, `rem`, `Status`) VALUES (NULL, '$empid', '$fname', '$lname', '$sname', '$gender', '$dob', '$maritalstatus', '$add1', '$add2', '$city', '$district', '$cell', '', '1')";
+		$sql = "INSERT INTO `emprofile` (`EmpID`, `Fname`, `Lname`, `Sname`, `Gender`, `DOB`, `MaritalStatus`, `Add1`, `Add2`, `City`, `District`, `Cell`, `rem`, `Status`) VALUES ('$empid', '$fname', '$lname', '$sname', '$gender', '$dob', '$maritalstatus', '$add1', '$add2', '$city', '$district', '$cell', '', '1')";
 		$result = mysql_query($sql) or die(mysql_error());		
 	}
 	else {
