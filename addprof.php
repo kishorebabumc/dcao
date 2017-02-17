@@ -38,24 +38,59 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="js/jquery-1.10.2.min.js"></script>
 <!-- Placed js at the end of the document so the pages load faster -->
 <script type="text/javascript">
-	$(document).ready(function(){
-		$("#empid").keyup(function(){
-			var empid = $(this).value;
-			$.ajax({
-				type:"POST",
-				url:"usercheck.php",
-				data:"empid =" + empid;
-					success:function(data){
-						if(data==0){
-							
-						}
-						else {
-							$("#message").html("<span style=font-size:13px; color: red'> Username already taken</span>");
-						}
-					}
-			});
+	$(document).ready(function()
+		{ 	$("#status").hide();
+			$("#empid").keyup(function() 
+			{  
+				var empid = $("#empid").val();										
+				if(empid.length == 7 )
+				{
+					$.ajax({  
+						type: "POST",  
+						url: "usercheck.php",  
+						data: "empid="+ empid,  						
+						success: function(msg){ 																				
+							if( msg == 1)
+ 							{	
+								var div = $("#empid").closest("div");
+								div.removeClass("has-error");								
+								div.addClass("has-warning");
+								$("#glypcn").remove();								
+								div.append('<span id="glypcn" class="glyphicon glyphicon-warning-sign form-control-feedback"></span>');
+								var div1 = $("#mit").closest("div");
+								$("#sub").remove();
+								div1.append('<button type="submit" id="sub" class="btn btn-info disabled">Submit</button>');
+								$("#status").show();
+							}  
+							else 
+							{  								
+								$("#status").hide();
+								var div = $("#empid").closest("div");
+								div.removeClass("has-error");
+								div.removeClass("has-warning");								
+								div.addClass("has-success");									
+								$("#glypcn").remove();
+								div.append('<span id="glypcn" class="glyphicon glyphicon-ok form-control-feedback"></span>');	
+								var div1 = $("#mit").closest("div");
+								$("#sub").remove();
+								div1.append('<button type="submit" id="sub" class="btn-success">Submit</button>');
+							} 
+						} 
+					}); 
+				}
+				else
+				{	$("#status").hide();			
+					var div = $("#empid").closest("div");				
+					div.addClass("has-error");
+					$("#glypcn").remove();
+					div.append('<span id="glypcn" class="glyphicon glyphicon-remove form-control-feedback"></span>');				
+					var div1 = $("#mit").closest("div");
+					$("#sub").remove();
+					div1.append('<button type="submit" id="sub" class="btn btn-info disabled">Submit</button>');
+				}
+			return false;
+			});			
 		});
-	});
 </script>
 
 </head> 
@@ -173,9 +208,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			
 			<div class="form-group">
 				<label class="col-md-2 control-label"></label>
+				<div class="col-md-2">
+					<div class="input-group in-grp1">
+						<span id="mit"></span>
+						<button type="submit" id="sub" class="btn-success">Submit</button>						
+					</div>					
+				</div>				
 				<div class="col-md-8">
-					<div class="input-group in-grp1">						
-						<button type="submit" class="btn-success">Submit</button>						
+					<div class="input-group in-grp1">				
+						<span id="status" style = "color:red">Employee Already Register, Please go to Edit Employee</button>						
 					</div>					
 				</div>
 				<div class="clearfix"> </div>
