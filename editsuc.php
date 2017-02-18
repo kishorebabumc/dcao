@@ -13,23 +13,20 @@
 		$test = mysql_query("SELECT * FROM empmonitoring WHERE EmpID='$empid' AND Status = 1");
 		$count = mysql_num_rows($test);
 		$result = mysql_fetch_assoc($test);
-		$sql = mysql_query("INSERT INTO `empmonitoring` (`ID`, `EmpID`, `SubDivID`, `DegID`, `DOJ`, `DOL`, `Rem`, `Status`) VALUES (NULL, '$empid', '$subdivid', '$degid', '$doj', '', 'Joined', '1')");	
-		/*if($count == 1){
-			$sql = mysql_query("UPDATE empmonitoring SET DOL ='$doj', Rem ='$rem', Status=0 WHERE EmpID='$empid' AND Status = 1");				
-			$sql1 = mysql_query("SELECT * FROM designations WHERE ID = '$degid' ");
-			$row1 = mysql_fetch_assoc($sql1);
-			$sql2 = mysql_query("SELECT * FROM subdivision WHERE ID = '$subdivid' ");		
-			$row2 = mysql_fetch_assoc($sql2);
-			$insert = mysql_query("INSERT INTO `empmonitoring` (`ID`, `EmpID`, `SubDivID`, `DegID`, `DOJ`, `DOL`, `Rem`, `Status`) VALUES (NULL, '$empid', '$subdivid', '$degid', '$doj', '', 'Joined', '1')");	
-		}
-		else {						
-			$sql1 = mysql_query("SELECT * FROM designations WHERE ID = '$degid' ");
-			$row1 = mysql_fetch_assoc($sql1);
-			$sql2 = mysql_query("SELECT * FROM subdivision WHERE ID = '$subdivid' ");		
-			$row2 = mysql_fetch_assoc($sql2);
-			$sql3 = mysql_query("INSERT INTO `users` (`id`, `userid`, `password`, `role`,`status`) VALUES (NULL, '$empid', '123456','2','1')"); 
-		}*/
 		
+		$sql1 = mysql_query("SELECT * FROM designations WHERE ID = '$degid' ");
+		$row1 = mysql_fetch_assoc($sql1);
+		$sql2 = mysql_query("SELECT * FROM subdivision WHERE ID = '$subdivid' ");		
+		$row2 = mysql_fetch_assoc($sql2);
+		if($count == 1){
+			$sql = mysql_query("UPDATE empmonitoring SET DOL ='$doj', Rem ='$rem', Status=0 WHERE EmpID='$empid' AND Status = 1");
+			$sql = mysql_query("INSERT INTO `empmonitoring` (`ID`, `EmpID`, `SubDivID`, `DegID`, `DOJ`, `DOL`, `Rem`, `Status`) VALUES (NULL, '$empid', '$subdivid', '$degid', '$doj', '', 'Joined', 1)") or die(mysql_error());
+						
+		}
+		else {
+			$sql = mysql_query("INSERT INTO `empmonitoring` (`ID`, `EmpID`, `SubDivID`, `DegID`, `DOJ`, `DOL`, `Rem`, `Status`) VALUES (NULL, '$empid', '$subdivid', '$degid', '$doj', '', 'Joined', 1)") or die(mysql_error());
+			$sql3 = mysql_query("INSERT INTO `users` (`id`, `userid`, `password`, `role`,`status`) VALUES (NULL, '$empid', '123456','2','1')");
+		}		
 	}
 	else {
 		header("location:admin.php");
@@ -128,7 +125,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						<label class="col-md-1">Designation</label>
 						<div class="col-md-2"><?php echo $row1['Designation']; ?> </div>
 						<label class="col-md-1">Sub Division</label>
-						<div class="col-md-2"><?php echo $row2['SubDiv']; echo $result['Rem'];  ?> </div>						
+						<div class="col-md-2"><?php echo $row2['SubDiv']; ?> </div>						
 					</div>	
 				</div>
 				<div class="row">
