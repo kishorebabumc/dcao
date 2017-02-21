@@ -1,7 +1,56 @@
 <?php
 	include("session.php");
 	include("sidepan.html");
-	$sql = mysql_query("SELECT * FROM emprofile WHERE Status = 1");
+	$sql = "Select
+  emprofile.EmpID,
+  emprofile.Fname,
+  emprofile.Lname,
+  emprofile.Sname,
+  emprofile.Gender,
+  emprofile.DOB,
+  emprofile.Cell,
+  subdivision.SubDiv,
+  designations.Designation,
+  empmonitoring.Status
+From
+  designations Inner Join
+  empmonitoring
+    On empmonitoring.DegID = designations.ID Inner Join
+  emprofile
+    On empmonitoring.EmpID = emprofile.EmpID Inner Join
+  subdivision
+    On empmonitoring.SubDivID = subdivision.ID
+Where
+  empmonitoring.Status = 1";
+	if(isset($_GET['sort'])){
+	
+		if ($_GET['sort'] == 'id')
+		{
+			$sql .= " ORDER BY EmpID";
+		}
+		elseif ($_GET['sort'] == 'emp')
+		{
+			$sql .= " ORDER BY Fname";
+		}
+		elseif ($_GET['sort'] == 'dob')
+		{
+			$sql .= " ORDER BY DOB";
+		}
+		elseif($_GET['sort'] == 'deg')
+		{
+			$sql .= " ORDER BY Designation";
+		}
+		elseif($_GET['sort'] == 'subdiv')
+		{
+			$sql .= " ORDER BY SubDiv";
+		}
+		elseif($_GET['sort'] == 'cell')
+		{
+			$sql .= " ORDER BY Cell";
+		}
+		
+	}	
+	$sql = mysql_query($sql);
 	$count = mysql_num_rows($sql);
 	
 ?>
@@ -91,16 +140,23 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="panel-body panel-body-inputin">
 		<h3 class="blank1">View Employees</h3>
 		<div>
+			<div class="row">
+				<div class="col-md-10"></div>
+				<div class="">
+				<div class="col-md-1"><input type="text" name="sort" placeholder="search"></div>
+				<div class="col-md-1"><a><span class="glyphicon glyphicon-search form-control-feedback"></span></a></div>
+				</div>
+			</div>
 			<table class="table table-hover">
 				<thead class="thead-inverse">
 				<tr>
 					<th>Sl.No.</th>
-					<th>Employee ID </th>
-					<th>Name of th Employee</th>
-					<th>Date of Birth</th>
-					<th>Designation</th>
-					<th>Sub Division</th>
-					<th>Mobile Number</th>
+					<th><a href="viewemp.php?sort=id">Employee ID</a> </th>
+					<th><a href="viewemp.php?sort=emp">Name of th Employee</a></th>
+					<th><a href="viewemp.php?sort=dob">Date of Birth</a></th>
+					<th><a href="viewemp.php?sort=deg">Designation</a></th>
+					<th><a href="viewemp.php?sort=subdiv">Sub Division</a></th>
+					<th><a href="viewemp.php?sort=cell">Mobile Number</a></th>
 					<th>Edit</th>
 				</tr>
 				</thead>
@@ -112,18 +168,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					echo "<tr><td>".$slno."</td>";	
 					echo "<td>".$result['EmpID']."</td>";					
 					echo "<td>".$result['Fname']." ".$result['Lname']." ".$result['Sname']."</td>";
-					echo "<td>".$result['DOB']."</td>";
-					$empid = $result['EmpID'];
-					/*$sql = mysql_query("SELECT * FROM empmonitoring WHERE EmpID ='$empid' AND Status = 1");
-					$result3 = mysql_fetch_array($sql);
-					$degid = $result3['DegID'];
-					$subdivid = $result3['SubDivID'];
-					$sql = mysql_query("SELECT * FROM designations WHERE ID = '$degid'");
-					$result1 = mysql_fetch_array($sql);
-					$sql = mysql_query("SELECT * FROM subdivision WHERE ID ='$subdivid'");		
-					$result2 = mysql_fetch_array($sql);*/
-					echo "<td></td>";
-					echo "<td></td>";
+					echo "<td>".$result['DOB']."</td>";										
+					echo "<td>".$result['Designation']."</td>";
+					echo "<td>".$result['SubDiv']."</td>";
 					echo "<td>".$result['Cell']."</td>";
 					echo "<td>
 							  <a><i class='fa fa-pencil'></i></a>
