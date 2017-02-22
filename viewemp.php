@@ -164,7 +164,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<?php if($count>0){
 				$slno=1;
 				while($result = mysql_fetch_assoc($sql))
-				{
+				{ 	
 					echo "<tr><td>".$slno."</td>";	
 					echo "<td>".$result['EmpID']."</td>";					
 					echo "<td>".$result['Fname']." ".$result['Lname']." ".$result['Sname']."</td>";
@@ -173,11 +173,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					echo "<td>".$result['SubDiv']."</td>";
 					echo "<td>".$result['Cell']."</td>";
 					echo "<td>
-							  <a><i class='fa fa-pencil'></i></a>
-							  <a><i class='fa fa-times'></i></a>
+							  <a href='editemp1.php?empid=".$result['EmpID']."'><i class='fa fa-pencil'></i></a>							  
 						  </td></tr>";
 					$slno = $slno +1;					
-				}
+				}				
 			}
 			?>
 			</table>

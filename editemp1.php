@@ -1,6 +1,9 @@
 <?php
 	include("session.php");
 	include("sidepan.html");
+	if(isset($_GET['empid'])){ 
+		$_SESSION['temp'] = $_GET['empid'];
+	}
 	if(isset($_SESSION['temp'])){		
 		$empid = $_SESSION['temp'];					
 		$desig = mysql_query("SELECT * FROM designations") or die(mysql_error());

@@ -154,7 +154,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				</div>
 				<label class="col-md-1">Last Name</label>
 				<div class="col-md-2">					
-						<input type="text" class="form-control1" name="lname" placeholder="Last Name" required>					
+						<input type="text" class="form-control1" name="lname" placeholder="Last Name" >					
 				</div>
 				<label class="col-md-1">Surname</label>
 				<div class="col-md-2">					
@@ -188,7 +188,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="form-group">
 				<label class="col-md-1">Address 2</label>
 				<div class="col-md-2">					
-						<input type="text" class="form-control1" name="add2" placeholder="Address 2" required>					
+						<input type="text" class="form-control1" name="add2" placeholder="Address 2" >					
 				</div>
 				<label class="col-md-1">City</label>
 				<div class="col-md-2">					
