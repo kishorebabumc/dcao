@@ -1,7 +1,7 @@
 <?php
 	include("session.php");
 	include("sidepan.html");
-	if(isset($_GET['empid'])){ 
+	if(isset($_GET['empid'])){
 		$_SESSION['temp'] = $_GET['empid'];
 	}
 	if(isset($_SESSION['temp'])){		

@@ -1,57 +1,33 @@
 <?php
 	include("session.php");
-	include("sidepan.html");
-	$sql = "Select
-  emprofile.EmpID,
-  emprofile.Fname,
-  emprofile.Lname,
-  emprofile.Sname,
-  emprofile.Gender,
-  emprofile.DOB,
-  emprofile.Cell,
-  subdivision.SubDiv,
-  designations.Designation,
-  empmonitoring.Status
-From
-  designations Inner Join
-  empmonitoring
-    On empmonitoring.DegID = designations.ID Inner Join
-  emprofile
-    On empmonitoring.EmpID = emprofile.EmpID Inner Join
-  subdivision
-    On empmonitoring.SubDivID = subdivision.ID
-Where
-  empmonitoring.Status = 1";
-	if(isset($_GET['sort'])){
+	include("sidepan.html");	 
 	
-		if ($_GET['sort'] == 'id')
-		{
-			$sql .= " ORDER BY EmpID";
-		}
-		elseif ($_GET['sort'] == 'emp')
-		{
-			$sql .= " ORDER BY Fname";
-		}
-		elseif ($_GET['sort'] == 'dob')
-		{
-			$sql .= " ORDER BY DOB";
-		}
-		elseif($_GET['sort'] == 'deg')
-		{
-			$sql .= " ORDER BY Designation";
-		}
-		elseif($_GET['sort'] == 'subdiv')
-		{
-			$sql .= " ORDER BY SubDiv";
-		}
-		elseif($_GET['sort'] == 'cell')
-		{
-			$sql .= " ORDER BY Cell";
-		}
-		
-	}	
-	$sql = mysql_query($sql);
-	$count = mysql_num_rows($sql);
+		$socname = $_SESSION['socname'];
+		$regno = $_SESSION['regno'];
+		$types = $_SESSION['types'];
+		$address = $_SESSION['address'];
+		$mandal = $_SESSION['mandal'];
+		$chief = $_SESSION['chief'];
+		$cell = $_SESSION['cell'];
+		$dor = $_SESSION['dor'];
+		$registrar = $_SESSION['registrar'];
+		$sql1 = mysql_query("select * from soctypes where ID='$types'");
+		$result1 = mysql_fetch_assoc($sql1);
+		$sql2 = mysql_query("select * from mandals where ID='$mandal'");
+		$result2 = mysql_fetch_assoc($sql2);
+		$sql3 = mysql_query("select * from funcregistrars where ID='$registrar'");
+		$result3 = mysql_fetch_assoc($sql3) or die(mysql_error());	
+		$sql = "INSERT INTO `socmonitoring` (`ID`, `SocID`, `NameCustodian`, `Cell`, `StatusID`, `FinStatusID`, `PresentDate`, `ClosingDate`, `Rem`, `Status`) 
+		         VALUES (NULL, '$socname', '$chief', '$cell', '1', '$mandal', '$dor', '', '', 1)";
+		$result = mysql_query($sql) or die(mysql_error());	
+		unset($_SESSION['socname']);
+		unset($_SESSION['regno']);
+		unset($_SESSION['types']);
+		unset($_SESSION['address']);;
+		unset($_SESSION['mandal']);
+		unset($_SESSION['chief']);
+		unset($_SESSION['cell']);
+		unset($_SESSION['dor']);
 	
 ?>
 <!DOCTYPE HTML>
@@ -138,52 +114,58 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!--notification menu end -->
 			</div>
 	<div class="panel-body panel-body-inputin">
-		<h3 class="blank1">View Employees</h3>
-		<div>			
-			<table class="table table-hover">
-				<tr>
-					<td></td>
-					<td><input type="text" name="sort" placeholder="Employee ID"></td>
-					<td><input type="text" name="sort" placeholder="Name"></td>					
-					<td><input type="text" name="sort" placeholder="Designation"></td>
-					<td><input type="text" name="sort" placeholder="Sub Divison"></td>
-					<td><button>Search</button></td>
-					<td></td>
-				</tr>
-			</table>	
-			<table class="table table-hover">				
-				<thead class="thead-inverse">				
-				<tr>
-					<th>Sl.No.</th>
-					<th><a href="viewemp.php?sort=id">Employee ID</a> </th>
-					<th><a href="viewemp.php?sort=emp">Name of th Employee</a></th>					
-					<th><a href="viewemp.php?sort=deg">Designation</a></th>
-					<th><a href="viewemp.php?sort=subdiv">Sub Division</a></th>
-					<th><a href="viewemp.php?sort=cell">Mobile Number</a></th>
-					<th>Edit</th>
-				</tr>
-				</thead>
-		  
-			<?php if($count>0){
-				$slno=1;
-				while($result = mysql_fetch_assoc($sql))
-				{ 	
-					echo "<tr><td>".$slno."</td>";	
-					echo "<td>".$result['EmpID']."</td>";					
-					echo "<td>".$result['Fname']." ".$result['Lname']." ".$result['Sname']."</td>";					
-					echo "<td>".$result['Designation']."</td>";
-					echo "<td>".$result['SubDiv']."</td>";
-					echo "<td>".$result['Cell']."</td>";
-					echo "<td>
-							  <a href='editemp1.php?empid=".$result['EmpID']."'><i class='fa fa-pencil'></i></a>							  
-						  </td></tr>";
-					$slno = $slno +1;					
-				}				
-			}
-			?>
-			</table>
-		
+		<h3 class="blank1">Society Added Succesfully </h3> 
+		<div class="row">
+			<div class="form-group">
+				<label class="col-md-1">Society Name</label>
+				<div class="col-md-2">					
+						<?php echo $socname."".$regno; ?>					
+				</div>
+				<label class="col-md-1">Type</label>
+				<div class="col-md-2">					
+						<?php echo $result1['Types']; ?>					
+				</div>
+				<label class="col-md-1">Address</label>
+				<div class="col-md-2">					
+						<?php echo $address." ".$result2['Mandal']." ,Krishna"; ?>							
+				</div>
+				<label class="col-md-1">Chief Promoter</label>
+				<div class="col-md-2">					
+						<?php echo $chief; ?>					
+				</div>				
+			</div>
 		</div>
+		<div class = "row">
+			<div class="form-group">
+				<label class="col-md-1">Cell</label>
+				<div class="col-md-2">					
+						<?php echo $cell; ?>	
+				</div>
+				<label class="col-md-1">Date of Registration</label>
+				<div class="col-md-2">					
+						<?php echo $dor; ?>					
+				</div>
+				<label class="col-md-1">Functional Registrar</label>
+				<div class="col-md-2">					
+						<?php echo $result3['Registrar']; ?>	
+				</div>				
+			</div>
+		</div>		
+		<div class = "row">
+			<div class="form-group">
+				<label class="col-md-1 control-label"></label>
+				<div class="col-md-7">					
+						<label style="color:green"> Society Added Succesfully, Add Financial Status of the Society</label>					
+						<form method="SESSION" action = "addemp.php">
+							<input type="hidden" value = "<?php echo $empid; ?>" name = "empid">							
+							<input type="hidden" value = "<?php echo $fname; ?>" name = "fname">							
+							<input type="hidden" value = "<?php echo $lname; ?>" name = "lname">							
+							<input type="hidden" value = "<?php echo $sname; ?>" name = "sname">							
+							<button type="submit" class="btn-success">Click here</button>
+						</form>
+				</div>
+			</div>
+		</div>	
 	</div>
 			
 		</div>	
