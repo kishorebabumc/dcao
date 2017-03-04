@@ -13,19 +13,17 @@
 		$chief = $_POST['chief'];
 		$cell = $_POST['cell'];
 		$dor = $_POST['dor'];
-		$registrar = $_POST['registrar'];		
+		$registrar = $_POST['registrar'];
+		$finstatus = $_POST['finstatus'];	
 		$sql = "INSERT INTO `societies` (`ID`, `Name`, `Reg No.`, `Type`, `Address`, `MandalID`, `District`, `ChiefPromoter`, `Cell`, `DOR`, `RegistrarID`, `AuditComp`, `DOL`,`status`) 
 		         VALUES (NULL, '$socname', '$regno', '$types', '$address', '$mandal', 'Krishna', '$chief', '$cell', '$dor', '$registrar', '', '',1)";
+		$result = mysql_query($sql) or die(mysql_error());
+		$sql = mysql_query("select * from societies");
+		$result = mysql_num_rows($sql);
+		$_SESSION['result'] = $result;
+		$sql = "INSERT INTO `socmonitoring` (`ID`, `SocID`, `NameCustodian`, `Cell`, `StatusID`, `FinStatus`, `PresentDate`, `ClosingDate`, `Rem`, `Status`) 
+		         VALUES (NULL, '$result', '$chief', '$cell', '1', '$finstatus', '$dor', '', 'Registered', 1)";
 		$result = mysql_query($sql) or die(mysql_error());		
-		$_SESSION['socname'] = $socname;
-		$_SESSION['regno'] = $regno;
-		$_SESSION['types'] = $types;
-		$_SESSION['address'] = $address;
-		$_SESSION['mandal'] = $mandal;
-		$_SESSION['chief'] = $chief;
-		$_SESSION['cell'] = $cell;
-		$_SESSION['dor'] = $dor;
-		$_SESSION['registrar'] = $registrar;
 		header("location:socsuc.php");		
 	}	
 ?>
@@ -180,7 +178,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="col-md-2">
 					<div class="input-group in-grp1">
 						<span id="mit"></span>
-						<button type="submit" id="sub" class="btn-success">Submit</button>						
+						<button type="submit" id="sub" class="btn-success">Submit <?php echo $result; ?></button>						
 					</div>					
 				</div>								
 				<div class="clearfix"> </div>

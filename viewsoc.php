@@ -1,29 +1,64 @@
 <?php
 	include("session.php");
 	include("sidepan.html");
-	$result = $_SESSION['result'];
-	$sql = mysql_query("Select
-						  societies.Name,
-						  societies.`Reg No.`,
-						  soctypes.Types,
-						  societies.Address,
-						  mandals.Mandal,
-						  societies.District,
-						  societies.ChiefPromoter,
-						  societies.Cell,
-						  societies.DOR,
-						  funcregistrars.Registrar
-						From
-						  societies Inner Join
-						  soctypes
-							On societies.Type = soctypes.ID Inner Join
-						  mandals
-							On societies.MandalID = mandals.ID Inner Join
-						  funcregistrars
-							On societies.RegistrarID = funcregistrars.ID
-						Where
-						  societies.ID = '$result'");
-	$result = mysql_fetch_assoc($sql);	
+	$sql = "Select
+			  socmonitoring.SocID, 
+			  societies.Name,
+			  societies.Address,
+			  societies.District,
+			  socmonitoring.NameCustodian,
+			  socmonitoring.Cell,
+			  societies.DOR,
+			  socmonitoring.FinStatus,
+			  soctypes.Types,
+			  mandals.Mandal,
+			  socstatus.SocStatus,
+			  funcregistrars.Registrar
+			From
+			  socmonitoring Inner Join
+			  societies
+				On socmonitoring.SocID = societies.ID Inner Join
+			  soctypes
+				On societies.Type = soctypes.ID Inner Join
+			  mandals
+				On societies.MandalID = mandals.ID Inner Join
+			  socstatus
+				On socmonitoring.StatusID = socstatus.ID Inner Join
+			  funcregistrars
+				On societies.RegistrarID = funcregistrars.ID
+			Where
+			  socmonitoring.Status = 1";
+	/*if(isset($_GET['sort'])){
+	
+		if ($_GET['sort'] == 'id')
+		{
+			$sql .= " ORDER BY EmpID";
+		}
+		elseif ($_GET['sort'] == 'emp')
+		{
+			$sql .= " ORDER BY Fname";
+		}
+		elseif ($_GET['sort'] == 'dob')
+		{
+			$sql .= " ORDER BY DOB";
+		}
+		elseif($_GET['sort'] == 'deg')
+		{
+			$sql .= " ORDER BY Designation";
+		}
+		elseif($_GET['sort'] == 'subdiv')
+		{
+			$sql .= " ORDER BY SubDiv";
+		}
+		elseif($_GET['sort'] == 'cell')
+		{
+			$sql .= " ORDER BY Cell";
+		}
+		
+	}*/	
+	$sql = mysql_query($sql);
+	$count = mysql_num_rows($sql);
+	
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -109,55 +144,59 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!--notification menu end -->
 			</div>
 	<div class="panel-body panel-body-inputin">
-		<h3 class="blank1">Society Added Succesfully </h3> 
-		<div class="row">
-			<div class="form-group">
-				<label class="col-md-1">Society Name</label>
-				<div class="col-md-2">					
-						<?php echo $result['Name']." ".$result['Reg No.']; ?>					
-				</div>
-				<label class="col-md-1">Type</label>
-				<div class="col-md-2">					
-						<?php echo $result['Types']; ?>					
-				</div>
-				<label class="col-md-1">Address</label>
-				<div class="col-md-2">					
-						<?php echo $result['Address']." ".$result['Mandal']." ,Krishna"; ?>							
-				</div>
-				<label class="col-md-1">Chief Promoter</label>
-				<div class="col-md-2">					
-						<?php echo $result['ChiefPromoter']; ?>					
-				</div>				
-			</div>
+		<h3 class="blank1">View Societies</h3>
+		<div>			
+			<!-- <table class="table table-hover">
+				<tr>
+					<td></td>
+					<td><input type="text" name="sort" placeholder="Employee ID"></td>
+					<td><input type="text" name="sort" placeholder="Name"></td>					
+					<td><input type="text" name="sort" placeholder="Designation"></td>
+					<td><input type="text" name="sort" placeholder="Sub Divison"></td>
+					<td><button>Search</button></td>
+					<td></td>
+				</tr>
+			</table> -->	
+			<table class="table table-hover">				
+				<thead class="thead-inverse">				
+				<tr>
+					<th>Sl.No.</th>
+					<th><a href="viewsoc.php?sort=">Name of the Society</a> </th>
+					<th><a href="viewsoc.php?sort=">Type of the Society</a></th>					
+					<th><a href="viewsoc.php?sort=">Address</a></th>
+					<th><a href="viewsoc.php?sort=">Custodian of Records with Cell No.</a></th>
+					<th><a href="viewsoc.php?sort=">Date of Registration</a></th>
+					<th><a href="viewsoc.php?sort=">Aided / Un-Aided </a></th>
+					<th><a href="viewsoc.php?sort=">Status</a></th>
+					<th><a href="viewsoc.php?sort=">Functional Registrar</a></th>
+					
+					<th>Edit</th>
+				</tr>
+				</thead>
+		  
+			<?php if($count>0){
+				$slno=1;
+				while($result = mysql_fetch_assoc($sql))
+				{ 	
+					echo "<tr><td>".$slno."</td>";	
+					echo "<td>".$result['Name']."</td>";					
+					echo "<td>".$result['Types']."</td>";					
+					echo "<td>".$result['Address'].", ".$result['Mandal'].", Krishna"."</td>";
+					echo "<td>".$result['NameCustodian'].", ".$result['Cell']."</td>";
+					echo "<td>".$result['DOR']."</td>";
+					echo "<td>".$result['FinStatus']."</td>";
+					echo "<td>".$result['SocStatus']."</td>";
+					echo "<td>".$result['Registrar']."</td>";
+					echo "<td>
+							  <a href='editsoc.php?empid=".$result['SocID']."'><i class='fa fa-pencil'></i></a>							  
+						  </td></tr>";
+					$slno = $slno +1;					
+				}				
+			}
+			?>
+			</table>
+		
 		</div>
-		<div class = "row">
-			<div class="form-group">
-				<label class="col-md-1">Cell</label>
-				<div class="col-md-2">					
-						<?php echo $result['Cell']; ?>	
-				</div>
-				<label class="col-md-1">Date of Registration</label>
-				<div class="col-md-2">					
-						<?php echo $result['DOR']; ?>					
-				</div>
-				<label class="col-md-1">Functional Registrar</label>
-				<div class="col-md-2">					
-						<?php echo $result['Registrar']; ?>	
-				</div>				
-			</div>
-		</div>		
-		<div class = "row">
-			<div class="form-group">
-				<label class="col-md-1 control-label"></label>
-				<div class="col-md-7">					
-						<label style="color:green"> Society Added Succesfully</label>					
-						
-							
-							<button class ="btn btn-primary" onclick="window.location.href='/dcao/admin.php'"> Home </button>
-						
-				</div>
-			</div>
-		</div>	
 	</div>
 			
 		</div>	
