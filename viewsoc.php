@@ -17,7 +17,7 @@
 			From
 			  socmonitoring Inner Join
 			  societies
-				On socmonitoring.SocID = societies.ID Inner Join
+				On socmonitoring.SocID = societies.SocID Inner Join
 			  soctypes
 				On societies.Type = soctypes.ID Inner Join
 			  mandals
@@ -56,7 +56,7 @@
 		}
 		
 	}*/	
-	$sql = mysql_query($sql);
+	$sql = mysql_query($sql) or die(mysql_error());
 	$count = mysql_num_rows($sql);
 	
 ?>
@@ -170,7 +170,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					<th><a href="viewsoc.php?sort=">Status</a></th>
 					<th><a href="viewsoc.php?sort=">Functional Registrar</a></th>
 					
-					<th>Edit</th>
+					<th>Edit Society Status</th>
+					<th>Edit Society Profile</th>
 				</tr>
 				</thead>
 		  
@@ -188,8 +189,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 					echo "<td>".$result['SocStatus']."</td>";
 					echo "<td>".$result['Registrar']."</td>";
 					echo "<td>
-							  <a href='editsoc.php?empid=".$result['SocID']."'><i class='fa fa-pencil'></i></a>							  
-						  </td></tr>";
+							  <a href='editsoc.php?socid=".$result['SocID']."'><i class='fa fa-pencil'></i></a>							  
+						  </td>";
+					echo "<td>
+							  <a href='editsoc.php?socid=".$result['SocID']."'><i class='fa fa-pencil'></i></a>							  
+						  </td></tr>";	  
 					$slno = $slno +1;					
 				}				
 			}

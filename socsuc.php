@@ -12,7 +12,8 @@
 						  societies.ChiefPromoter,
 						  societies.Cell,
 						  societies.DOR,
-						  funcregistrars.Registrar
+						  funcregistrars.Registrar,
+						  subdivision.SubDiv
 						From
 						  societies Inner Join
 						  soctypes
@@ -20,9 +21,11 @@
 						  mandals
 							On societies.MandalID = mandals.ID Inner Join
 						  funcregistrars
-							On societies.RegistrarID = funcregistrars.ID
+							On societies.RegistrarID = funcregistrars.ID Inner Join
+						  subdivision
+							On societies.SubDivID = subdivision.ID	
 						Where
-						  societies.ID = '$result'");
+						  societies.SocID = '$result'") or die(mysql_error());
 	$result = mysql_fetch_assoc($sql);	
 ?>
 <!DOCTYPE HTML>
@@ -139,6 +142,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<label class="col-md-1">Date of Registration</label>
 				<div class="col-md-2">					
 						<?php echo $result['DOR']; ?>					
+				</div>
+				<label class="col-md-1">Sub Division</label>
+				<div class="col-md-2">					
+						<?php echo $result['SubDiv']; ?>	
 				</div>
 				<label class="col-md-1">Functional Registrar</label>
 				<div class="col-md-2">					

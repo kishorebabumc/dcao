@@ -1,28 +1,17 @@
 <?php
 	include("session.php");
 	include("sidepan.html");
-	if(isset($_GET['empid'])){
-		$_SESSION['temp'] = $_GET['empid'];
-	}
-	if(isset($_SESSION['temp'])){		
-		$empid = $_SESSION['temp'];					
-		$desig = mysql_query("SELECT * FROM designations") or die(mysql_error());
-		$subdiv = mysql_query("SELECT * FROM subdivision") or die(mysql_error());
-		$sql = mysql_query("SELECT * FROM emprofile WHERE EmpID = '$empid'");	
-		$empdata = mysql_fetch_assoc($sql);
-		$sql = mysql_query("SELECT * FROM empmonitoring WHERE EmpID='$empid' AND Status = 1");
-		$workdata = mysql_fetch_assoc($sql);
-		$degid = $workdata['DegID'];
-		$subid = $workdata['SubDivID'];
-		$sql = mysql_query("SELECT * FROM designations WHERE ID='$degid'");
-		$currentdesig = mysql_fetch_assoc($sql);	
-		$sql = mysql_query("SELECT * FROM subdivision WHERE ID='$subid'");
-		$currentsubdiv = mysql_fetch_assoc($sql);
+	
+		$_SESSION['temp'] = $_GET['socid'];
+	
+	
+		$socid = $_SESSION['temp'];					
+		$status = mysql_query("SELECT * FROM socstatus") or die(mysql_error());		
+		$sql = mysql_query("SELECT * FROM societies WHERE SocID = '$socid'");	
+		$socdata = mysql_fetch_assoc($sql);
+		$sql = mysql_query("SELECT * FROM socmonitoring WHERE SocID = '$socid' AND Status = 1");
+		$workdata = mysql_fetch_assoc($sql);		
 		unset($_SESSION['temp']);
-	}
-	else{
-		header("location:admin.php");
-	}		
 	
 ?>
 <!DOCTYPE HTML>
@@ -108,11 +97,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!--notification menu end -->
 			</div>
 			<div class="panel-body panel-body-inputin">
-				<h3 class="blank1">Edit Employee</h3>
+				<h3 class="blank1">Edit Society Status</h3>
 				<form role="form" class="form-horizontal" action="editsuc.php" method="post">			
 					<div class="form-group">
-						<label class="col-md-1">Employee ID</label>
-						<div class="col-md-2"><?php echo $empid; ?> </div>
+						<label class="col-md-1">Society Name</label>
+						<div class="col-md-2"><?php echo $socdata['Name']; ?> </div>
 						<label class="col-md-1">Employee Name</label>
 						<div class="col-md-2">
 							<?php echo $empdata['Fname']." ".$empdata['Lname']." ".$empdata['Sname']; ?>

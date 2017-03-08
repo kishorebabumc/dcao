@@ -4,25 +4,31 @@
 	$sql1 = mysql_query("SELECT * FROM soctypes") or die(mysql_error());
 	$sql2 = mysql_query("SELECT * FROM mandals") or die(mysql_error());	
 	$sql3 = mysql_query("SELECT * FROM funcregistrars") or die(mysql_error());	
+	$sql4 = mysql_query("SELECT * FROM subdivision") or die(mysql_error());	
 	if($_SERVER['REQUEST_METHOD'] == "POST") {
 		$socname = $_POST['socname'];
 		$regno = $_POST['regno'];
 		$types = $_POST['types'];
+		$sql = mysql_query("SELECT * FROM societies WHERE Type = '$types'");
+		$count = mysql_num_rows($sql);
+		$sql1 = mysql_query("SELECT * FROM `soctypes` WHERE `ID`='$types'");
+		$result = mysql_fetch_assoc($sql1);
+		$count = $count+1;
+		$socid = $result['Types'].$count;
 		$address = $_POST['address'];
 		$mandal = $_POST['mandal'];
 		$chief = $_POST['chief'];
 		$cell = $_POST['cell'];
 		$dor = $_POST['dor'];
 		$registrar = $_POST['registrar'];
-		$finstatus = $_POST['finstatus'];	
-		$sql = "INSERT INTO `societies` (`ID`, `Name`, `Reg No.`, `Type`, `Address`, `MandalID`, `District`, `ChiefPromoter`, `Cell`, `DOR`, `RegistrarID`, `AuditComp`, `DOL`,`status`) 
-		         VALUES (NULL, '$socname', '$regno', '$types', '$address', '$mandal', 'Krishna', '$chief', '$cell', '$dor', '$registrar', '', '',1)";
-		$result = mysql_query($sql) or die(mysql_error());
-		$sql = mysql_query("select * from societies");
-		$result = mysql_num_rows($sql);
-		$_SESSION['result'] = $result;
+		$finstatus = $_POST['finstatus'];
+		$subdiv = $_POST['subdiv'];	
+		$sql = "INSERT INTO `societies` (`SocID`, `Name`, `Reg No.`, `Type`, `Address`, `MandalID`,`SubDivID`, `District`, `ChiefPromoter`, `Cell`, `DOR`, `RegistrarID`, `AuditComp`, `DOL`,`status`) 
+		         VALUES ('$socid', '$socname', '$regno', '$types', '$address', '$mandal','$subdiv', 'Krishna', '$chief', '$cell', '$dor', '$registrar', '', '',1)";
+		$result = mysql_query($sql) or die(mysql_error());		
+		$_SESSION['result'] = $socid;
 		$sql = "INSERT INTO `socmonitoring` (`ID`, `SocID`, `NameCustodian`, `Cell`, `StatusID`, `FinStatus`, `PresentDate`, `ClosingDate`, `Rem`, `Status`) 
-		         VALUES (NULL, '$result', '$chief', '$cell', '1', '$finstatus', '$dor', '', 'Registered', 1)";
+		         VALUES (NULL, '$socid', '$chief', '$cell', '1', '$finstatus', '$dor', '', 'Registered', 1)";
 		$result = mysql_query($sql) or die(mysql_error());		
 		header("location:socsuc.php");		
 	}	
@@ -171,6 +177,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							<option>Aided</option>
 							<option>Un-Aided</option>							
 						</select>
+				</div>
+				<label class="col-md-1">Sub Division</label>
+				<div class="col-md-2">					
+						<select name="subdiv" class="form-control1">								
+								<?php while ($row1 = mysql_fetch_assoc($sql4)) 
+									echo "<option value ='".$row1['ID']."'>".$row1["SubDiv"]."</option>";								
+								 ?>
+						</select>	
 				</div>				
 			</div>
 			<div class="form-group">
@@ -178,7 +192,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<div class="col-md-2">
 					<div class="input-group in-grp1">
 						<span id="mit"></span>
-						<button type="submit" id="sub" class="btn-success">Submit <?php echo $result; ?></button>						
+						<button type="submit" id="sub" class="btn-success">Submit </button>						
 					</div>					
 				</div>								
 				<div class="clearfix"> </div>
