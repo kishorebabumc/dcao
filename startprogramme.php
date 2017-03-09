@@ -1,19 +1,7 @@
 <?php
 	include("session.php");
-	include("sidepan.html");
-	$error = " ";
-	if($_SERVER["REQUEST_METHOD"] == "POST"){
-		$empid = $_POST['empid'];
-		$sql = mysql_query("SELECT * FROM emprofile WHERE EmpID = '$empid'");
-		$count = mysql_num_rows($sql);
-		if($count == 1){
-			$_SESSION['temp'] = $empid;
-			header("location:editemp1.php");
-		}
-		else {
-			$error = "Employee ID not found, Register Employee First";
-		}
-	}		
+	include("sidepan.html");	
+	
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -51,6 +39,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="js/jquery-1.10.2.min.js"></script>
 <!-- Placed js at the end of the document so the pages load faster -->
 
+
 </head> 
    
  <body class="sticky-header left-side-collapsed"  onload="initMap()">
@@ -67,68 +56,75 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!--toggle button start-->
 			<a class="toggle-btn  menu-collapsed"><i class="fa fa-bars"></i></a>
 			<!--toggle button end-->
+
 			<!--notification menu start -->
-				<div class="menu-right">
-					<div class="user-panel-top">  						
-						<div class="profile_details">		
-							<ul>
-								<li class="dropdown profile_details_drop">
-									<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-										<div class="profile_img">											
-											 <div class="user-name">
-												<p>Administrator<span><?php echo $_SESSION['user'];?></span></p>
-											 </div>
-											 <i class="lnr lnr-chevron-down"></i>
-											 <i class="lnr lnr-chevron-up"></i>
-											<div class="clearfix"></div>	
-										</div>	
-									</a>
-									<ul class="dropdown-menu drp-mnu">
-										<li> <a href="changepass.php"><i class="fa fa-cog"></i> Change Password</a> </li> 									
-										<li> <a href="logout.php"><i class="fa fa-sign-out"></i> Logout</a> </li>
-									</ul>
-								</li>
-								<div class="clearfix"> </div>
-							</ul>
-						</div>		
-						
-						<div class="clearfix"></div>
-					</div>
+			<div class="menu-right">
+				<div class="user-panel-top">  						
+					<div class="profile_details">		
+						<ul>
+							<li class="dropdown profile_details_drop">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+									<div class="profile_img">											
+										 <div class="user-name">
+											<p>Administrator<span><?php echo $_SESSION['user'];?></span></p>
+										 </div>
+										 <i class="lnr lnr-chevron-down"></i>
+										 <i class="lnr lnr-chevron-up"></i>
+										<div class="clearfix"></div>	
+									</div>	
+								</a>
+								<ul class="dropdown-menu drp-mnu">
+									<li> <a href="changepass.php"><i class="fa fa-cog"></i> Change Password</a> </li> 									
+									<li> <a href="logout.php"><i class="fa fa-sign-out"></i> Logout</a> </li>
+								</ul>
+							</li>
+							<div class="clearfix"> </div>
+						</ul>
+					</div>		
+					
+					<div class="clearfix"></div>
 				</div>
+			  </div>
 			<!--notification menu end -->
 			</div>
-			<div class="panel-body panel-body-inputin">
-				<h3 class="blank1">Edit Employee</h3>
-				<form role="form" class="form-horizontal" method="post">			
-					<div class="form-group">
-						<label class="col-md-1">Employee ID</label>
-						<div class = "col-md-1">
-							<input type ="text" name ="empid" required>	
-						</div>						
-						<div class="col-md-1">
-							<div class="input-group in-grp1">						
-								<button type="submit" class="btn-success">Submit</button>						
-							</div>					
-						</div>
-						<div class="col-md-9">
-							<div class="input-group in-grp1">						
-								<span> <?php echo $error ?></span>						
-							</div>					
-						</div>
-					</div>
-				</form>
-			</div>			
-		</div>
+	<div class="panel-body panel-body-inputin">
+		<h3 class="blank1">Audit Programme for the year</h3>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					Total Adied Societies : <?php 	$sql = mysql_query("SELECT * FROM socmonitoring WHERE StatusID IN (1,3,5) AND Status = 1 AND FinStatus ='Aided' ");
+													$count = mysql_num_rows($sql);
+													echo $count;
+											?>			
+				</div>
+				<div class="col-md-4">
+					Total Un-Adied Societies : <?php 	$sql = mysql_query("SELECT * FROM socmonitoring WHERE StatusID IN (1,3,5) AND Status = 1 AND FinStatus ='Un-Aided' ");
+													$count = mysql_num_rows($sql);
+													echo $count;
+											?>
+				</div>
+				<div class="col-md-4">
+					Total No of Employees : <?php 	$sql = mysql_query("SELECT * FROM empmonitoring WHERE Status = 1 ");
+													$count = mysql_num_rows($sql);
+													echo $count;
+											?>
+				</div>	
+			</div>	
+		</div>		
+	</div>
+			
+		</div>	
 		<!-- //header-ends -->
 			
         <!--footer section start-->
-		<footer>
-		   <p>Designed and Developed by V Kishore Babu <a href="https://w3layouts.com/" target="_blank"></a></p>
-		</footer>
+			<footer>
+			   <p>Designed and Developed by V Kishore Babu <a href="https://w3layouts.com/" target="_blank"></a></p>
+			</footer>
         <!--footer section end-->
 
       <!-- main content end-->
-   </section>  
+   </section>
+  
 <script src="js/jquery.nicescroll.js"></script>
 <script src="js/scripts.js"></script>
 <!-- Bootstrap Core JavaScript -->

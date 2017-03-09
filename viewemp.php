@@ -22,36 +22,17 @@ From
     On empmonitoring.SubDivID = subdivision.ID
 Where
   empmonitoring.Status = 1";
-	if(isset($_GET['sort'])){
-	
-		if ($_GET['sort'] == 'id')
-		{
-			$sql .= " ORDER BY EmpID";
-		}
-		elseif ($_GET['sort'] == 'emp')
-		{
-			$sql .= " ORDER BY Fname";
-		}
-		elseif ($_GET['sort'] == 'dob')
-		{
-			$sql .= " ORDER BY DOB";
-		}
-		elseif($_GET['sort'] == 'deg')
-		{
-			$sql .= " ORDER BY Designation";
-		}
-		elseif($_GET['sort'] == 'subdiv')
-		{
-			$sql .= " ORDER BY SubDiv";
-		}
-		elseif($_GET['sort'] == 'cell')
-		{
-			$sql .= " ORDER BY Cell";
-		}
+	if($_SERVER["REQUEST_METHOD"] == "POST") {
 		
+		
+		$name = $_POST['name'];	
+		
+		$sql .= " AND (emprofile.Fname LIKE '%$name%' OR emprofile.Lname LIKE '%$name%' OR emprofile.Sname LIKE '%$name%')";		
+			
 	}	
 	$sql = mysql_query($sql);
 	$count = mysql_num_rows($sql);
+	$sql1 = mysql_query("SELECT * FROM designations");
 	
 ?>
 <!DOCTYPE HTML>
@@ -140,26 +121,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="panel-body panel-body-inputin">
 		<h3 class="blank1">View Employees</h3>
 		<div>			
-			<table class="table table-hover">
-				<tr>
-					<td></td>
-					<td><input type="text" name="sort" placeholder="Employee ID"></td>
-					<td><input type="text" name="sort" placeholder="Name"></td>					
-					<td><input type="text" name="sort" placeholder="Designation"></td>
-					<td><input type="text" name="sort" placeholder="Sub Divison"></td>
-					<td><button>Search</button></td>
-					<td></td>
-				</tr>
-			</table>	
+			<form action="" method="post">	
+				<input type="text" name="name" placeholder="Search by name" required>
+				<button type="sumbit" class="btn btn-primary">Search</button>
+			</form>
 			<table class="table table-hover">				
 				<thead class="thead-inverse">				
 				<tr>
 					<th>Sl.No.</th>
-					<th><a href="viewemp.php?sort=id">Employee ID</a> </th>
-					<th><a href="viewemp.php?sort=emp">Name of th Employee</a></th>					
-					<th><a href="viewemp.php?sort=deg">Designation</a></th>
-					<th><a href="viewemp.php?sort=subdiv">Sub Division</a></th>
-					<th><a href="viewemp.php?sort=cell">Mobile Number</a></th>
+					<th>Employee ID </th>
+					<th>Name of th Employee</th>					
+					<th>Designation</th>
+					<th>Sub Division</th>
+					<th>Mobile Number</th>
 					<th>Edit</th>
 				</tr>
 				</thead>

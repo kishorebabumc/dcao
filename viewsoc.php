@@ -4,6 +4,7 @@
 	$sql = "Select
 			  socmonitoring.SocID, 
 			  societies.Name,
+			  societies.`Reg No.`,
 			  societies.Address,
 			  societies.District,
 			  socmonitoring.NameCustodian,
@@ -161,17 +162,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<thead class="thead-inverse">				
 				<tr>
 					<th>Sl.No.</th>
-					<th><a href="viewsoc.php?sort=">Name of the Society</a> </th>
-					<th><a href="viewsoc.php?sort=">Type of the Society</a></th>					
-					<th><a href="viewsoc.php?sort=">Address</a></th>
-					<th><a href="viewsoc.php?sort=">Custodian of Records with Cell No.</a></th>
-					<th><a href="viewsoc.php?sort=">Date of Registration</a></th>
-					<th><a href="viewsoc.php?sort=">Aided / Un-Aided </a></th>
-					<th><a href="viewsoc.php?sort=">Status</a></th>
-					<th><a href="viewsoc.php?sort=">Functional Registrar</a></th>
+					<th>Name of the Society </th>
+					<th>Type of the Society</th>					
+					<th>Address</th>
+					<th>Custodian of Records with Cell No.</th>
+					<th>Date of Registration</th>
+					<th>Aided / Un-Aided </th>
+					<th>Status</th>
+					<th>Functional Registrar</th>
 					
 					<th>Edit Society Status</th>
-					<th>Edit Society Profile</th>
+					<th>Final Close Society</th>
 				</tr>
 				</thead>
 		  
@@ -180,7 +181,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				while($result = mysql_fetch_assoc($sql))
 				{ 	
 					echo "<tr><td>".$slno."</td>";	
-					echo "<td>".$result['Name']."</td>";					
+					echo "<td>".$result['Name']." ".$result['Reg No.']."</td>";					
 					echo "<td>".$result['Types']."</td>";					
 					echo "<td>".$result['Address'].", ".$result['Mandal'].", Krishna"."</td>";
 					echo "<td>".$result['NameCustodian'].", ".$result['Cell']."</td>";
@@ -192,7 +193,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 							  <a href='editsoc.php?socid=".$result['SocID']."'><i class='fa fa-pencil'></i></a>							  
 						  </td>";
 					echo "<td>
-							  <a href='editsoc.php?socid=".$result['SocID']."'><i class='fa fa-pencil'></i></a>							  
+							  <a href='closesoc.php?socid=".$result['SocID']."'><i class='fa fa-times'></i></a>							  
 						  </td></tr>";	  
 					$slno = $slno +1;					
 				}				

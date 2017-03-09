@@ -51,8 +51,8 @@
 </div>
 <!-- Form Module-->
 <div class="module form-module">
-  <div class="toggle"><i class="fa fa-times fa-pencil"></i>
-    <div class="tooltip">Click Me</div>
+  <div class="toggle"><i class=""></i>
+    
   </div>
   <div class="form">
     <h2>Login to your account</h2>

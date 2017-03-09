@@ -1,36 +1,54 @@
 <?php
 	include("session.php");
-	include("sidepan.html");	
-	if($_SERVER['REQUEST_METHOD'] == "POST") {
-		$empid = $_POST['empid'];
-		$fname = $_POST['fname'];
-		$lname = $_POST['lname'];
-		$sname = $_POST['sname'];
-		$subdivid = $_POST['SubDivID'];
-		$degid = $_POST['DegID'];
-		$doj = $_POST['doj'];
-		$rem = $_POST['rem'];
-		$test = mysql_query("SELECT * FROM empmonitoring WHERE EmpID='$empid' AND Status = 1");
-		$count = mysql_num_rows($test);
-		$result = mysql_fetch_assoc($test);
-		
-		$sql1 = mysql_query("SELECT * FROM designations WHERE ID = '$degid' ");
-		$row1 = mysql_fetch_assoc($sql1);
-		$sql2 = mysql_query("SELECT * FROM subdivision WHERE ID = '$subdivid' ");		
-		$row2 = mysql_fetch_assoc($sql2);
-		if($count == 1){
-			$sql = mysql_query("UPDATE empmonitoring SET DOL ='$doj', Rem ='$rem', Status=0 WHERE EmpID='$empid' AND Status = 1");
-			$sql = mysql_query("INSERT INTO `empmonitoring` (`ID`, `EmpID`, `SubDivID`, `DegID`, `DOJ`, `DOL`, `Rem`, `Status`) VALUES (NULL, '$empid', '$subdivid', '$degid', '$doj', '', 'Joined', 1)") or die(mysql_error());
-						
-		}
-		else {
-			$sql = mysql_query("INSERT INTO `empmonitoring` (`ID`, `EmpID`, `SubDivID`, `DegID`, `DOJ`, `DOL`, `Rem`, `Status`) VALUES (NULL, '$empid', '$subdivid', '$degid', '$doj', '', 'Joined', 1)") or die(mysql_error());
-			$sql3 = mysql_query("INSERT INTO `users` (`id`, `userid`, `password`, `role`,`status`) VALUES (NULL, '$empid', '123456','2','1')");
-		}		
+	include("sidepan.html");
+	$error = "* Once you Windup the Society from the List you unable to get it";
+	if(isset($_GET['socid'])){
+		$_SESSION['temp'] = $_GET['socid'];
 	}
-	else {
+	if(isset($_SESSION['temp'])){		
+		$socid = $_SESSION['temp'];					
+		$status = mysql_query("SELECT * FROM socstatus") or die(mysql_error());				
+		$sql = mysql_query("Select
+						  societies.Name,
+						  societies.`Reg No.`,
+						  soctypes.Types,
+						  societies.Address,
+						  mandals.Mandal,
+						  subdivision.SubDiv,
+						  socmonitoring.NameCustodian,
+						  socmonitoring.Cell,
+						  socmonitoring.SocID,
+						  socmonitoring.PresentDate,
+						  socstatus.SocStatus,
+						  socmonitoring.StatusID,
+						  socmonitoring.FinStatus
+						From
+						  societies Inner Join
+						  soctypes
+							On societies.Type = soctypes.ID Inner Join
+						  mandals
+							On societies.MandalID = mandals.ID Inner Join
+						  subdivision
+							On societies.SubDivID = subdivision.ID Inner Join
+						  socmonitoring
+							On societies.SocID = socmonitoring.SocID Inner Join
+						  socstatus
+							On socmonitoring.StatusID = socstatus.ID								
+						WHERE 
+						    socmonitoring.SocID = '$socid' AND socmonitoring.Status = 1");
+		$workdata = mysql_fetch_assoc($sql);		
+		unset($_SESSION['temp']);
+	}
+	else{
 		header("location:admin.php");
+	}
+	if($_SERVER["REQUEST_METHOD"] == "POST") {
+		$dateofwind = date("Y-m-d");
+		$error = "Society Windup and Deleted from the List Successfully";
+		$sql = mysql_query("UPDATE socmonitoring SET ClosingDate ='$dateofwind', Status=0 WHERE SocID='$socid' AND Status = 1");
+		$sql = mysql_query("UPDATE societies SET DOL ='$dateofwind', Status=0 WHERE SocID='$socid' AND Status = 1");
 	}	
+	
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -115,26 +133,61 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!--notification menu end -->
 			</div>
 			<div class="panel-body panel-body-inputin">
-				<h3 class="blank1" style="color:green">Employee Successfully Edited</h3>	
-				<div class="row">		
-					<div class="form-group">	
-						<label class="col-md-1">Employee ID</label>
-						<div class="col-md-2"><?php echo $empid; ?> </div>						
-						<label class="col-md-1">Employee Name</label>
-						<div class="col-md-2"><?php echo $fname." ".$lname." ".$sname; ?> </div>						
-						<label class="col-md-1">Designation</label>
-						<div class="col-md-2"><?php echo $row1['Designation']; ?> </div>
-						<label class="col-md-1">Sub Division</label>
-						<div class="col-md-2"><?php echo $row2['SubDiv']; ?> </div>						
-					</div>	
-				</div>
-				<div class="row">
+				<h3 class="blank1" style="color:red">Windup of the Society</h3>
+				<form role="form" class="form-horizontal" action="" method="post">			
 					<div class="form-group">
-						<label class="col-md-1">Date of Joining</label>
-						<div class="col-md-2"><?php echo $doj; ?> </div>						
-						<div class="col-md-4"><button class ="btn btn-primary" onclick="window.location.href='/dcao/admin.php'"> Home </button> </div>
+						<label class="col-md-1">Society Name</label>
+						<div class="col-md-2">
+							<?php echo $workdata['Name']." No.".$workdata['Reg No.']; ?> 							
+						</div>
+						<label class="col-md-1">Type of the Society</label>
+						<div class="col-md-2">
+							<?php echo $workdata['Types']; ?>							
+						</div>
+						
+						<label class="col-md-1">Address</label>
+						<div class="col-md-2">
+							<?php echo $workdata['Address'].", ".$workdata['Mandal'].", Krishna "; ?>														
+						</div>
+						
+						<label class="col-md-1">Sub Division</label>
+						<div class="col-md-2">
+							<?php echo $workdata['SubDiv']; ?>							
+						</div>												
 					</div>
-				</div>	
+					<div class="form-group">
+						<label class="col-md-1">Custodian of Books</label>
+						<div class="col-md-2">
+							<?php echo $workdata['NameCustodian']; ?>
+						</div>
+						<label class="col-md-1">Mobile No of Custodian</label>
+						<div class = "col-md-2">
+							<?php echo $workdata['Cell']; ?>
+						</div>
+						<label class="col-md-1">Status of the Society</label>
+						<div class = "col-md-2">							
+							<?php echo $workdata['SocStatus']; ?>															
+						</div>
+						<label class="col-md-1">Financial Status</label>
+						<div class = "col-md-2">							
+							<?php echo $workdata['FinStatus']; ?>
+						</div>
+					</div>
+					<div class="form-group">					
+						
+						<div class="col-md-2">
+							<div class="input-group in-grp1">						
+								<button type="submit" class="btn btn-danger">Submit </button> 								
+							</div>					
+						</div>						
+						<div class="col-md-10">
+							<div class="input-group in-grp1 " style="color:red">						
+								<?php echo $error; ?>
+							</div>					
+						</div>						
+						<div class="clearfix"> </div>
+					</div>						
+				</form>
 			</div>			
 		</div>
 		<!-- //header-ends -->

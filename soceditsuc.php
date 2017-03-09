@@ -2,30 +2,28 @@
 	include("session.php");
 	include("sidepan.html");	
 	if($_SERVER['REQUEST_METHOD'] == "POST") {
-		$empid = $_POST['empid'];
-		$fname = $_POST['fname'];
-		$lname = $_POST['lname'];
-		$sname = $_POST['sname'];
-		$subdivid = $_POST['SubDivID'];
-		$degid = $_POST['DegID'];
-		$doj = $_POST['doj'];
-		$rem = $_POST['rem'];
-		$test = mysql_query("SELECT * FROM empmonitoring WHERE EmpID='$empid' AND Status = 1");
+		$socid = $_POST['socid'];
+		$socname = $_POST['socname'];
+		$regno = $_POST['regno'];
+		$address = $_POST['address'];
+		$mandal = $_POST['mandal'];		
+		$custodian = $_POST['custodian'];
+		$cell = $_POST['cell'];
+		$status = $_POST['status'];
+		$sql1 = mysql_query("SELECT * FROM socstatus WHERE ID='$status'");
+		$result1 = mysql_fetch_assoc($sql1);
+		$finstatus = $_POST['finstatus'];
+		$closingdate = $_POST['closingdate'];
+		$presentdate = date("Y-m-d");
+		
+		$test = mysql_query("SELECT * FROM socmonitoring WHERE SocID='$socid' AND Status = 1");
 		$count = mysql_num_rows($test);
 		$result = mysql_fetch_assoc($test);
 		
-		$sql1 = mysql_query("SELECT * FROM designations WHERE ID = '$degid' ");
-		$row1 = mysql_fetch_assoc($sql1);
-		$sql2 = mysql_query("SELECT * FROM subdivision WHERE ID = '$subdivid' ");		
-		$row2 = mysql_fetch_assoc($sql2);
+		
 		if($count == 1){
-			$sql = mysql_query("UPDATE empmonitoring SET DOL ='$doj', Rem ='$rem', Status=0 WHERE EmpID='$empid' AND Status = 1");
-			$sql = mysql_query("INSERT INTO `empmonitoring` (`ID`, `EmpID`, `SubDivID`, `DegID`, `DOJ`, `DOL`, `Rem`, `Status`) VALUES (NULL, '$empid', '$subdivid', '$degid', '$doj', '', 'Joined', 1)") or die(mysql_error());
-						
-		}
-		else {
-			$sql = mysql_query("INSERT INTO `empmonitoring` (`ID`, `EmpID`, `SubDivID`, `DegID`, `DOJ`, `DOL`, `Rem`, `Status`) VALUES (NULL, '$empid', '$subdivid', '$degid', '$doj', '', 'Joined', 1)") or die(mysql_error());
-			$sql3 = mysql_query("INSERT INTO `users` (`id`, `userid`, `password`, `role`,`status`) VALUES (NULL, '$empid', '123456','2','1')");
+			$sql = mysql_query("UPDATE socmonitoring SET ClosingDate ='$closingdate', Status=0 WHERE SocID='$socid' AND Status = 1");
+			$sql = mysql_query("INSERT INTO `socmonitoring` (`ID`, `SocID`, `NameCustodian`, `Cell`, `StatusID`, `FinStatus`,`PresentDate`, `ClosingDate`, `Rem`, `Status`) VALUES (NULL, '$socid', '$custodian', '$cell', '$status', '$finstatus', '$presentdate', '','Modified', 1)") or die(mysql_error());						
 		}		
 	}
 	else {
@@ -115,23 +113,25 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<!--notification menu end -->
 			</div>
 			<div class="panel-body panel-body-inputin">
-				<h3 class="blank1" style="color:green">Employee Successfully Edited</h3>	
+				<h3 class="blank1" style="color:green">Society Successfully Edited</h3>	
 				<div class="row">		
 					<div class="form-group">	
-						<label class="col-md-1">Employee ID</label>
-						<div class="col-md-2"><?php echo $empid; ?> </div>						
-						<label class="col-md-1">Employee Name</label>
-						<div class="col-md-2"><?php echo $fname." ".$lname." ".$sname; ?> </div>						
-						<label class="col-md-1">Designation</label>
-						<div class="col-md-2"><?php echo $row1['Designation']; ?> </div>
-						<label class="col-md-1">Sub Division</label>
-						<div class="col-md-2"><?php echo $row2['SubDiv']; ?> </div>						
+						<label class="col-md-1">Society Name</label>
+						<div class="col-md-2"><?php echo $socname." ".$regno; ?> </div>						
+						<label class="col-md-1">Address</label>
+						<div class="col-md-2"><?php echo $address.", ".$mandal; ?> </div>						
+						<label class="col-md-1">Name of the Custodian</label>
+						<div class="col-md-2"><?php echo $custodian; ?> </div>
+						<label class="col-md-1">Cell No.</label>
+						<div class="col-md-2"><?php echo $cell; ?> </div>						
 					</div>	
 				</div>
 				<div class="row">
 					<div class="form-group">
-						<label class="col-md-1">Date of Joining</label>
-						<div class="col-md-2"><?php echo $doj; ?> </div>						
+						<label class="col-md-1">Status</label>
+						<div class="col-md-2"><?php echo $result1['SocStatus']; ?> </div>
+						<label class="col-md-1">Financial Status</label>
+						<div class="col-md-2"><?php echo $finstatus; ?> </div>						
 						<div class="col-md-4"><button class ="btn btn-primary" onclick="window.location.href='/dcao/admin.php'"> Home </button> </div>
 					</div>
 				</div>	

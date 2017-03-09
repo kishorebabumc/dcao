@@ -27,8 +27,8 @@
 		         VALUES ('$socid', '$socname', '$regno', '$types', '$address', '$mandal','$subdiv', 'Krishna', '$chief', '$cell', '$dor', '$registrar', '', '',1)";
 		$result = mysql_query($sql) or die(mysql_error());		
 		$_SESSION['result'] = $socid;
-		$sql = "INSERT INTO `socmonitoring` (`ID`, `SocID`, `NameCustodian`, `Cell`, `StatusID`, `FinStatus`, `PresentDate`, `ClosingDate`, `Rem`, `Status`) 
-		         VALUES (NULL, '$socid', '$chief', '$cell', '1', '$finstatus', '$dor', '', 'Registered', 1)";
+		$sql = "INSERT INTO `socmonitoring` (`ID`, `SocID`,`TypeID`, `NameCustodian`, `Cell`, `StatusID`, `FinStatus`, `PresentDate`, `ClosingDate`, `Rem`, `Status`) 
+		         VALUES (NULL, '$socid','$types', '$chief', '$cell', '1', '$finstatus', '$dor', '', 'Registered', 1)";
 		$result = mysql_query($sql) or die(mysql_error());		
 		header("location:socsuc.php");		
 	}	

@@ -16,7 +16,10 @@
 						  subdivision.SubDiv,
 						  socmonitoring.NameCustodian,
 						  socmonitoring.Cell,
+						  socmonitoring.SocID,
+						  socmonitoring.PresentDate,
 						  socstatus.SocStatus,
+						  socmonitoring.StatusID,
 						  socmonitoring.FinStatus
 						From
 						  societies Inner Join
@@ -127,7 +130,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<form role="form" class="form-horizontal" action="soceditsuc.php" method="post">			
 					<div class="form-group">
 						<label class="col-md-1">Society Name</label>
-						<div class="col-md-2"><?php echo $workdata['Name']." No.".$workdata['Reg No.']; ?> 
+						<div class="col-md-2">
+							<?php echo $workdata['Name']." No.".$workdata['Reg No.']; ?> 
+							<input type="hidden" name="socid" value ="<?php echo $workdata['SocID']; ?>">
+							<input type="hidden" name="socname" value ="<?php echo $workdata['Name']; ?>">
+							<input type="hidden" name="regno" value ="<?php echo $workdata['Reg No.']; ?>">
+							<input type="hidden" name="closingdate" value ="<?php echo $workdata['PresentDate']; ?>">
 						</div>
 						<label class="col-md-1">Type of the Society</label>
 						<div class="col-md-2">
@@ -136,12 +144,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 						
 						<label class="col-md-1">Address</label>
 						<div class="col-md-2">
-							<?php echo $workdata['Address'].", ".$workdata['Mandal'].", Krishna "; ?>							
+							<?php echo $workdata['Address'].", ".$workdata['Mandal'].", Krishna "; ?>
+							<input type="hidden" name="address" value ="<?php echo $workdata['Address']; ?>">
+							<input type="hidden" name="mandal" value ="<?php echo $workdata['Mandal']; ?>">								
 						</div>
 						
 						<label class="col-md-1">Sub Division</label>
 						<div class="col-md-2">
-							<?php echo $workdata['SubDiv']; ?>
+							<?php echo $workdata['SubDiv']; ?>							
 						</div>												
 					</div>
 					<div class="form-group">
